@@ -1,4 +1,5 @@
 ﻿using Host.Config;
+using IdentityServer.SiteFinity.Configuration;
 using Owin;
 using Thinktecture.IdentityServer.Core.Configuration;
 using Thinktecture.IdentityServer.Core.Logging;
@@ -33,13 +34,13 @@ namespace Host
 
         private void ConfigurePlugins(IAppBuilder pluginApp, IdentityServerOptions options)
         {
-            //var wsFedOptions = new WsFederationPluginOptions(options);
+            var siteFinityOptions = new SiteFinityPluginOptions(options);
 
             //// data sources for in-memory services
             //wsFedOptions.Factory.Register(new Registration<IEnumerable<RelyingParty>>(RelyingParties.Get()));
             //wsFedOptions.Factory.RelyingPartyService = new Registration<IRelyingPartyService>(typeof(InMemoryRelyingPartyService));
 
-            //pluginApp.UseWsFederationPlugin(wsFedOptions);
+            pluginApp.UseSiteFinityPlugin(siteFinityOptions);
         }
     }
 }

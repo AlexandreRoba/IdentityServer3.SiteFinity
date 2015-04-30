@@ -73,6 +73,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Hosting\WebApiConfig.cs" />
+    <Compile Include="Configuration\PluginAppBuilderExtensions.cs" />
+    <Compile Include="Configuration\SiteFinityPluginOptions.cs" />
+    <Compile Include="Configuration\SiteFinityServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteFinityController.cs" />
   </ItemGroup>
