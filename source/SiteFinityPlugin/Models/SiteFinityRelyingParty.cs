@@ -35,7 +35,7 @@
         /// <value>
         /// The SiteFinity Secret Key
         /// </value>
-        public string ShareSecret { get; set; }
+        public string Key { get; set; }
 
         public SiteFinityRelyingParty()
         {

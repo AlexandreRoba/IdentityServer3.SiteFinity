@@ -1,5 +1,8 @@
-﻿using Host.Config;
+﻿using System.Collections.Generic;
+using Host.Config;
 using IdentityServer.SiteFinity.Configuration;
+using IdentityServer.SiteFinity.Models;
+using IdentityServer.SiteFinity.Services;
 using Owin;
 using Thinktecture.IdentityServer.Core.Configuration;
 using Thinktecture.IdentityServer.Core.Logging;
@@ -36,9 +39,9 @@ namespace Host
         {
             var siteFinityOptions = new SiteFinityPluginOptions(options);
 
-            //// data sources for in-memory services
-            //wsFedOptions.Factory.Register(new Registration<IEnumerable<RelyingParty>>(RelyingParties.Get()));
-            //wsFedOptions.Factory.RelyingPartyService = new Registration<IRelyingPartyService>(typeof(InMemoryRelyingPartyService));
+            // data sources for in-memory services
+            siteFinityOptions.Factory.Register(new Registration<IEnumerable<SiteFinityRelyingParty>>(SiteFinityRelyingParties.Get()));
+            siteFinityOptions.Factory.SiteFinityRelyingPartyService = new Registration<ISiteFinityRelyingPartyService>(typeof(InMemoryRelyingPartyService));
 
             pluginApp.UseSiteFinityPlugin(siteFinityOptions);
         }
