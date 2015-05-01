@@ -48,17 +48,17 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
         }
 
 
-        private class HttpControllerTypeResolver : IHttpControllerTypeResolver
-        {
-            public ICollection<Type> GetControllerTypes(IAssembliesResolver _)
-            {
-                var httpControllerType = typeof(IHttpController);
-                return typeof(WebApiConfig)
-                    .Assembly
-                    .GetTypes()
-                    .Where(t => t.IsClass && !t.IsAbstract && httpControllerType.IsAssignableFrom(t))
-                    .ToList();
-            }
-        }
+        //private class HttpControllerTypeResolver : IHttpControllerTypeResolver
+        //{
+        //    public ICollection<Type> GetControllerTypes(IAssembliesResolver _)
+        //    {
+        //        var httpControllerType = typeof(IHttpController);
+        //        return typeof(WebApiConfig)
+        //            .Assembly
+        //            .GetTypes()
+        //            .Where(t => t.IsClass && !t.IsAbstract && httpControllerType.IsAssignableFrom(t))
+        //            .ToList();
+        //    }
+        //}
     }
 }
