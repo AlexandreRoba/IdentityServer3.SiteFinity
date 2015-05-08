@@ -75,7 +75,7 @@ namespace IdentityServer.SiteFinity
 
         void EnsureProperties()
         {
-            var parser = new SWTParser(this.RawToken);
+            var parser = new SwtParser(this.RawToken);
 
             this.issuer = parser.Issuer;
             this.audience = parser.Audience;

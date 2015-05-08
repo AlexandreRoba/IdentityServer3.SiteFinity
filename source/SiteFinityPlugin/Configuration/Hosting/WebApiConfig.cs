@@ -21,7 +21,7 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
             config.SuppressDefaultHostAuthentication();
 
             //config.MessageHandlers.Insert(0, new KatanaDependencyResolver());
-            //config.Services.Add(typeof(IExceptionLogger), new LogProviderExceptionLogger());
+            config.Services.Add(typeof(IExceptionLogger), new LogProviderExceptionLogger());
             //config.Services.Replace(typeof(IHttpControllerTypeResolver), new HttpControllerTypeResolver());
 
             //config.Formatters.Remove(config.Formatters.XmlFormatter);
@@ -30,18 +30,18 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
 
             if (options.IdentityServerOptions.LoggingOptions.EnableWebApiDiagnostics)
             {
-                //var liblog = new TraceSource("LibLog");
-                //liblog.Switch.Level = SourceLevels.All;
-                //liblog.Listeners.Add(new LibLogTraceListener());
+                var liblog = new TraceSource("LibLog");
+                liblog.Switch.Level = SourceLevels.All;
+                liblog.Listeners.Add(new LibLogTraceListener());
 
-                //var diag = config.EnableSystemDiagnosticsTracing();
-                //diag.IsVerbose = options.IdentityServerOptions.LoggingOptions.WebApiDiagnosticsIsVerbose;
-                //diag.TraceSource = liblog;
+                var diag = config.EnableSystemDiagnosticsTracing();
+                diag.IsVerbose = options.IdentityServerOptions.LoggingOptions.WebApiDiagnosticsIsVerbose;
+                diag.TraceSource = liblog;
             }
 
             if (options.IdentityServerOptions.LoggingOptions.EnableHttpLogging)
             {
-                //config.MessageHandlers.Add(new RequestResponseLogger());
+                config.MessageHandlers.Add(new RequestResponseLogger());
             }
 
             return config;

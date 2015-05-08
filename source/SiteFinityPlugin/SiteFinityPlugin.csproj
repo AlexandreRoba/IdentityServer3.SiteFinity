@@ -58,6 +58,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.2.3\lib\net45\System.Web.Http.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Http.Tracing">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Tracing.5.2.3\lib\net45\System.Web.Http.Tracing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,7 +76,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Configuration\Hosting\LibLogTraceListener.cs" />
+    <Compile Include="Configuration\Hosting\LogProviderExceptionLogger.cs" />
+    <Compile Include="Configuration\RequestResponseLogger.cs" />
+    <Compile Include="Services\InMemorySiteFinityRelyingPartyService.cs" />
+    <Compile Include="Services\ISiteFinityRelyingPartyService.cs" />
+    <Compile Include="SwtParser.cs" />
+    <Compile Include="Configuration\Hosting\NoCacheAttributecs.cs" />
     <Compile Include="Models\SiteFinityRelyingParty.cs" />
     <Compile Include="SitefinityClaimTypes.cs" />
     <Compile Include="Configuration\Hosting\WebApiConfig.cs" />
@@ -83,6 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleWebToken.cs" />
     <Compile Include="SiteFinityController.cs" />
+    <Compile Include="Validation\SignInValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
