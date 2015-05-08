@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -15,6 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using IdentityServer.SiteFinity.Configuration.Hosting;
+using IdentityServer.SiteFinity.Services;
+using IdentityServer.SiteFinity.Validation;
 using Thinktecture.IdentityServer.Core;
 using Thinktecture.IdentityServer.Core.Extensions;
 using Thinktecture.IdentityServer.Core.Logging;
@@ -30,19 +31,29 @@ namespace IdentityServer.SiteFinity
     {
         private readonly static ILog Logger = LogProvider.GetCurrentClassLogger();
 
+        private readonly SignInValidator _validator;
+
+        public SiteFinityController(SignInValidator validator)
+        {
+            _validator = validator;
+        }
 
         [Route("")]
         public async Task<IHttpActionResult> Get(string realm = "", string tokenType = "", string redirect_uri = "", bool deflate = false, bool sign_out = false)
         {
-            if (!IsAuthenticated())
+            var message = new SignInRequestMessage(realm, tokenType, redirect_uri, deflate, sign_out);
+
+            var result = await _validator.ValidateAsync(message, User as ClaimsPrincipal);
+
+            if (result.IsSignInRequired)
             {
                 Logger.Info("Redirect to login page");
-                return RedirectToLogin();
+                return await RedirectToLogin();
             }
 
             //TODO: Need to lear the Identity Service Token service and replace this custom code. 
             //I'll start by using custom code first.
-            var reply = redirect_uri;
+            //var reply = result.ReplyUrl;
             
             var principal = new ClaimsPrincipal(User);
             var identity = ClaimsPrincipal.PrimaryIdentitySelector(principal.Identities);
@@ -51,6 +62,9 @@ namespace IdentityServer.SiteFinity
             var idx = issuer.IndexOf("?");
             if (idx != -1)
                 issuer = issuer.Substring(0, idx);
+
+            
+
             var token = this.CreateToken(identity.Claims, issuer, realm);
             NameValueCollection queryString;
             if (!String.IsNullOrEmpty(reply))
@@ -84,26 +98,27 @@ namespace IdentityServer.SiteFinity
 
        
 
-        private SimpleWebToken CreateToken(IEnumerable<Claim> claims, string issuerName, string appliesTo)
+        private async Task<SimpleWebToken> CreateToken(IEnumerable<Claim> claims, string issuerName, string appliesTo)
         {
             appliesTo = appliesTo.ToLower();
 
-            var sKey = ConfigurationManager.AppSettings[appliesTo];
-            if (String.IsNullOrEmpty(sKey))
-            {
-                //check if appliesTo failed to find the key because it's missing a trailing slash, 
-                //or because it has a trailing slash which shouldn't be there
-                //and act accordingly (and try again):
-                if (!appliesTo.EndsWith("/"))
-                    appliesTo += "/";
-                else
-                    appliesTo = VirtualPathUtility.RemoveTrailingSlash(appliesTo);
+            //var sKey = ConfigurationManager.AppSettings[appliesTo];
+            //if (String.IsNullOrEmpty(sKey))
+            //{
+            //    //check if appliesTo failed to find the key because it's missing a trailing slash, 
+            //    //or because it has a trailing slash which shouldn't be there
+            //    //and act accordingly (and try again):
+            //    if (!appliesTo.EndsWith("/"))
+            //        appliesTo += "/";
+            //    else
+            //        appliesTo = VirtualPathUtility.RemoveTrailingSlash(appliesTo);
 
-                sKey = ConfigurationManager.AppSettings[appliesTo];
-                if (String.IsNullOrEmpty(sKey))
-                    throw new ConfigurationException(String.Format("Missing symmetric key for \"{0}\".", appliesTo));
-            }
-            var key = this.HexToByte(sKey);
+            //    sKey = ConfigurationManager.AppSettings[appliesTo];
+            //    if (String.IsNullOrEmpty(sKey))
+            //        throw new ConfigurationException(String.Format("Missing symmetric key for \"{0}\".", appliesTo));
+            //}
+            //var key = this.HexToByte(sKey);
+            var key = this.HexToByte("HelloWorld");
 
             var sb = new StringBuilder();
             foreach (var c in claims)
@@ -208,17 +223,8 @@ namespace IdentityServer.SiteFinity
             }
             return sb.ToString();
         }
-
-        private bool IsAuthenticated()
-        {
-            var user = User as ClaimsPrincipal;
-            if (user != null && user.Identity.IsAuthenticated)
-                return true;
-            return false;
-        }
-
-
-        private IHttpActionResult RedirectToLogin()
+        
+        private Task<IHttpActionResult> RedirectToLogin()
         {
             Uri publicRequestUri = GetPublicRequestUri();
 

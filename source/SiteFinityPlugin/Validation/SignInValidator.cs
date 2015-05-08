@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using IdentityServer.SiteFinity.Models;
 using IdentityServer.SiteFinity.Services;
 using Thinktecture.IdentityServer.Core.Logging;
 
@@ -18,6 +17,80 @@ namespace IdentityServer.SiteFinity.Validation
         public SignInValidator(ISiteFinityRelyingPartyService siteFinityRelyingPartyService)
         {
             _siteFinityRelyingPartyService = siteFinityRelyingPartyService;
+        }
+
+        public async Task<SignInValidationResult> ValidateAsync(SignInRequestMessage message, ClaimsPrincipal subject)
+        {
+            Logger.Info("Start SiteFinity signin request validation");
+            var result = new SignInValidationResult();
+
+            // parse whr
+            if (!String.IsNullOrWhiteSpace(message.Realm))
+            {
+                result.Realm = message.Realm;
+            }
+            
+            if (!subject.Identity.IsAuthenticated)
+            {
+                result.IsSignInRequired = true;
+                return result;
+            }
+
+            // check realm
+            var rp = await _siteFinityRelyingPartyService.GetByRealmAsync(message.Realm);
+
+            if (rp == null || rp.Enabled == false)
+            {
+                LogError("SiteFinity Relying party not found: " + message.Realm, result);
+
+                return new SignInValidationResult
+                {
+                    IsError = true,
+                    Error = "invalid_sitefinity_relying_party"
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(message.RedirectUri))
+            {
+                if (!string.IsNullOrWhiteSpace(rp.ReplyUrl))
+                {
+                    result.ReplyUrl = rp.ReplyUrl; 
+                }
+                else
+                {
+                    LogError("Reply url is defined or provided for : " + message.Realm, result);
+
+                    return new SignInValidationResult
+                    {
+                        IsError = true,
+                        Error = "missing_replyUrl"
+                    };
+                }
+            }
+            else
+            {
+                result.ReplyUrl = message.RedirectUri;
+            }
+
+            
+            result.SiteFinityRelyingParty = rp;
+            result.SignInRequestMessage = message;
+            result.Subject = subject;
+
+            LogSuccess(result);
+            return result;
+        }
+
+        private void LogSuccess(SignInValidationResult result)
+        {
+            var log = LogSerializer.Serialize(new SignInValidationLog(result));
+            Logger.InfoFormat("End WS-Federation signin request validation\n{0}", log);
+        }
+
+        private void LogError(string message, SignInValidationResult result)
+        {
+            var log = LogSerializer.Serialize(new SignInValidationLog(result));
+            Logger.ErrorFormat("{0}\n{1}", message, log);
         }
     }
 }

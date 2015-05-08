@@ -36,7 +36,7 @@ namespace IdentityServer.SiteFinity.Configuration
                 //    CookieName = options.IdentityServerOptions.AuthenticationOptions.CookieOptions.Prefix + WsFederationPluginOptions.CookieName,
                 //});
 
-                //sitefinityApp.Use<AutofacContainerMiddleware>(AutofacConfig.Configure(options));
+                sitefinityApp.Use<AutofacContainerMiddleware>(AutofacConfig.Configure(options));
                 Microsoft.Owin.Infrastructure.SignatureConversions.AddConversions(app);
                 sitefinityApp.UseWebApi(WebApiConfig.Configure(options));
             });

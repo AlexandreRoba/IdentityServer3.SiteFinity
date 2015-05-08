@@ -30,6 +30,14 @@
         public string Realm { get; set; }
 
         /// <summary>
+        /// Get or set the allowed reply url
+        /// </summary>
+        /// <value>
+        /// The reply url
+        /// </value>
+        public string ReplyUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the Sitefinity ShareSecret
         /// </summary>
         /// <value>
