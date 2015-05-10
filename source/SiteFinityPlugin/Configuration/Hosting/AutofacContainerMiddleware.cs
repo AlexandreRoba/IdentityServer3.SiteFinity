@@ -6,7 +6,7 @@ using Microsoft.Owin;
 
 namespace IdentityServer.SiteFinity.Configuration.Hosting
 {
-    public class AutofacContainerMiddleware
+    internal class AutofacContainerMiddleware
     {
         readonly private Func<IDictionary<string, object>, Task> _next;
         readonly private IContainer _container;
@@ -17,7 +17,7 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
             _container = container;
         }
 
-        internal async Task Invoke(IDictionary<string, object> env)
+        public async Task Invoke(IDictionary<string, object> env)
         {
             var context = new OwinContext(env);
 

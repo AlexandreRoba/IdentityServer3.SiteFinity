@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Integration.WebApi;
+using IdentityServer.SiteFinity.ResponseHandling;
 using IdentityServer.SiteFinity.Validation;
 using Microsoft.Owin;
 using Thinktecture.IdentityServer.Core.Configuration;
@@ -30,7 +31,7 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
             builder.RegisterType<SignInValidator>().AsSelf();
 
             // processors
-            //builder.RegisterType<SignInResponseGenerator>().AsSelf();
+            builder.RegisterType<SignInResponseGenerator>().AsSelf();
             //builder.RegisterType<MetadataResponseGenerator>().AsSelf();
 
             // general services
