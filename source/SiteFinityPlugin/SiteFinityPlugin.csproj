@@ -92,6 +92,8 @@
     <Compile Include="Configuration\Hosting\LogProviderExceptionLogger.cs" />
     <Compile Include="Configuration\RequestResponseLogger.cs" />
     <Compile Include="Models\SignInValidationLog.cs" />
+    <Compile Include="ResponseHandling\SignInResponseGenerator.cs" />
+    <Compile Include="ResponseHandling\SignInResponseMessage.cs" />
     <Compile Include="Services\InMemorySiteFinityRelyingPartyService.cs" />
     <Compile Include="Services\ISiteFinityRelyingPartyService.cs" />
     <Compile Include="Services\SignInRequestMessage.cs" />

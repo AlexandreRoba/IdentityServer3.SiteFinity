@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Security.Principal;
 using IdentityServer.SiteFinity.Models;
 using IdentityServer.SiteFinity.Services;
 
@@ -14,5 +15,6 @@ namespace IdentityServer.SiteFinity.Validation
         public SignInRequestMessage SignInRequestMessage { get; set; }
         public ClaimsPrincipal Subject { get; set; }
         public string ReplyUrl { get; set; }
+        public string Issuer { get; set; }
     }
 }

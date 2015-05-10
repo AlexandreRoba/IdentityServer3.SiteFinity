@@ -19,12 +19,11 @@ namespace IdentityServer.SiteFinity.Validation
             _siteFinityRelyingPartyService = siteFinityRelyingPartyService;
         }
 
-        public async Task<SignInValidationResult> ValidateAsync(SignInRequestMessage message, ClaimsPrincipal subject)
+        public async Task<SignInValidationResult> ValidateAsync(string requestAbsoluteUri, SignInRequestMessage message, ClaimsPrincipal subject)
         {
             Logger.Info("Start SiteFinity signin request validation");
             var result = new SignInValidationResult();
 
-            // parse whr
             if (!String.IsNullOrWhiteSpace(message.Realm))
             {
                 result.Realm = message.Realm;
@@ -36,7 +35,6 @@ namespace IdentityServer.SiteFinity.Validation
                 return result;
             }
 
-            // check realm
             var rp = await _siteFinityRelyingPartyService.GetByRealmAsync(message.Realm);
 
             if (rp == null || rp.Enabled == false)
@@ -49,6 +47,8 @@ namespace IdentityServer.SiteFinity.Validation
                     Error = "invalid_sitefinity_relying_party"
                 };
             }
+
+
 
             if (string.IsNullOrWhiteSpace(message.RedirectUri))
             {
@@ -72,7 +72,7 @@ namespace IdentityServer.SiteFinity.Validation
                 result.ReplyUrl = message.RedirectUri;
             }
 
-            
+            result.Issuer = requestAbsoluteUri;
             result.SiteFinityRelyingParty = rp;
             result.SignInRequestMessage = message;
             result.Subject = subject;
@@ -91,6 +91,15 @@ namespace IdentityServer.SiteFinity.Validation
         {
             var log = LogSerializer.Serialize(new SignInValidationLog(result));
             Logger.ErrorFormat("{0}\n{1}", message, log);
+        }
+
+        private string GetIssuerFromRequestUri(string absoluteUri)
+        {
+            var issuer = absoluteUri;
+            var idx = issuer.IndexOf("?");
+            if (idx != -1)
+                issuer = issuer.Substring(0, idx);
+            return issuer;
         }
     }
 }
