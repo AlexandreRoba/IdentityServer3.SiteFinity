@@ -53,26 +53,12 @@ namespace IdentityServer.SiteFinity
                 return BadRequest(result.Error);
             }
 
-            var responseMessage = await _signInResponseGenerator.GenerateResponseAsync(message, result);
-            if (responseMessage.IsRedirect)
-            {
-                return Redirect(responseMessage.Url) as IHttpActionResult;
-            }
+            var responseMessage = await _signInResponseGenerator.GenerateResponseAsync(message, result,Request);
+            
+            return responseMessage;
 
-            var response = Request.CreateResponse(HttpStatusCode.OK, responseMessage.Content);
-            return ResponseMessage(response);
-
-
+            
         }
-
-
-
-
-
-
-
-
-
 
         private IHttpActionResult RedirectToLogin()
         {

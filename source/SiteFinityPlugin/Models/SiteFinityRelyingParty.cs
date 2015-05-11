@@ -45,9 +45,12 @@
         /// </value>
         public string Key { get; set; }
 
+        public string Domain { get; set; }
+
         public SiteFinityRelyingParty()
         {
             Enabled = true;
+            Domain = "Default";
         }
     }
 }

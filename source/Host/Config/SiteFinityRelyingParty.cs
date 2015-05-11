@@ -14,7 +14,8 @@ namespace Host.Config
                     Name = "HelloCrowd",
                     Realm = "https://localhost:44303/",
                     Enabled = true,
-                    Key = "52ACD69BD85C96F08C74762ED247A4AAFD2174E6B3E7F700630C2DAC5E169D21"
+                    Key = "C0EB0636ADA66011DDC5D01C25E0520EEB4645F10318F18A164D32556921B7B8",
+                    Domain = "Default"
                 }
                 
             };

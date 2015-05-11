@@ -72,7 +72,7 @@ namespace IdentityServer.SiteFinity.Validation
                 result.ReplyUrl = message.RedirectUri;
             }
 
-            result.Issuer = requestAbsoluteUri;
+            result.Issuer = GetIssuerFromRequestUri(requestAbsoluteUri);
             result.SiteFinityRelyingParty = rp;
             result.SignInRequestMessage = message;
             result.Subject = subject;

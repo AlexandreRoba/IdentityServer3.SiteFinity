@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using IdentityServer.SiteFinity.Services;
 using IdentityServer.SiteFinity.Validation;
 using Thinktecture.IdentityServer.Core.Logging;
@@ -23,16 +24,15 @@ namespace IdentityServer.SiteFinity.ResponseHandling
     {
         private readonly static ILog Logger = LogProvider.GetCurrentClassLogger();
 
-        public async Task<SignInResponseMessage> GenerateResponseAsync(SignInRequestMessage message, SignInValidationResult result)
+        public async Task<IHttpActionResult> GenerateResponseAsync(SignInRequestMessage message, SignInValidationResult result,HttpRequestMessage request)
         {
             Logger.Info("Creating SiteFinity signin response");
-
-            SignInResponseMessage response;
 
             var principal = new ClaimsPrincipal(result.Subject);
             var identity = ClaimsPrincipal.PrimaryIdentitySelector(principal.Identities);
 
-            var token = await CreateToken(identity.Claims, result);
+            
+            var token = await CreateToken(identity.Name, identity.Claims, result);
 
             NameValueCollection queryString;
             if (!String.IsNullOrEmpty(result.ReplyUrl))
@@ -53,27 +53,20 @@ namespace IdentityServer.SiteFinity.ResponseHandling
                 path = String.Concat(path, ToQueryString(queryString));
                 var uri = new Uri(new Uri(result.Realm), path);
 
-                response = new SignInResponseMessage()
-                {
-                    IsRedirect = true,
-                    Url = uri.AbsoluteUri
-                };
-                return response;
+                var redirectResult = new RedirectResult(uri,request);
+                return redirectResult;
             }
 
             queryString = new NameValueCollection();
             WrapSWT(queryString, token, message.Deflate);
 
-            response = new SignInResponseMessage()
-            {
-                IsRedirect = false,
-                Content = new StringContent(ToQueryString(queryString, false), Encoding.UTF8, "application/x-www-form-urlencoded")
-            };
-            return response;
+            var content = new StringContent(ToQueryString(queryString, false), Encoding.UTF8,"application/x-www-form-urlencoded");
+            var responseMessage = request.CreateResponse(HttpStatusCode.OK,content);
+            return new ResponseMessageResult(responseMessage);
 
         }
 
-        private async Task<SimpleWebToken> CreateToken(IEnumerable<Claim> claims, SignInValidationResult result)
+        private async Task<SimpleWebToken> CreateToken(string name,IEnumerable<Claim> claims, SignInValidationResult result)
         {
 
             var key = this.HexToByte(result.SiteFinityRelyingParty.Key);
@@ -82,7 +75,13 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             foreach (var c in claims)
                 sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(c.Type), WebUtility.UrlEncode(c.Value));
 
+
             sb.AppendFormat("{0}={1}&", SitefinityClaimTypes.StsType, "wa");
+            sb.AppendFormat("{0}={1}&", SitefinityClaimTypes.UserName, name);
+            sb.AppendFormat("{0}={1}&", SitefinityClaimTypes.Domain, result.SiteFinityRelyingParty.Domain);
+
+
+
 
             //double lifeTimeInSeconds = 3600;
             var loginDateClaim = claims.FirstOrDefault(x => x.Type == SitefinityClaimTypes.LastLoginDate);
@@ -122,12 +121,12 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             return returnBytes;
         }
 
-        private async void WrapSWT(NameValueCollection collection, SimpleWebToken token, bool deflate)
+        private void WrapSWT(NameValueCollection collection, SimpleWebToken token, bool deflate)
         {
             var rawToken = token.RawToken;
             if (deflate)
             {
-                var zipped = await ZipStr(rawToken);
+                var zipped = ZipStr(rawToken);
                 rawToken = Convert.ToBase64String(zipped);
                 collection["wrap_deflated"] = "true";
             }
@@ -136,7 +135,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             collection["wrap_access_token_expires_in"] = seconds.ToString();
         }
 
-        private async Task<byte[]> ZipStr(String str)
+        private byte[] ZipStr(String str)
         {
             using (MemoryStream output = new MemoryStream())
             {
@@ -144,7 +143,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
                 {
                     using (StreamWriter writer = new StreamWriter(gzip, Encoding.UTF8))
                     {
-                        await writer.WriteAsync(str);
+                        writer.Write(str);
                     }
                 }
 
