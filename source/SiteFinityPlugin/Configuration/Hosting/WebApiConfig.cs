@@ -20,11 +20,11 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
             config.MapHttpAttributeRoutes();
             config.SuppressDefaultHostAuthentication();
 
-            //config.MessageHandlers.Insert(0, new KatanaDependencyResolver());
+            config.MessageHandlers.Insert(0, new KatanaDependencyResolver());
             config.Services.Add(typeof(IExceptionLogger), new LogProviderExceptionLogger());
-            //config.Services.Replace(typeof(IHttpControllerTypeResolver), new HttpControllerTypeResolver());
+            config.Services.Replace(typeof(IHttpControllerTypeResolver), new HttpControllerTypeResolver());
 
-            //config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.LocalOnly;
 
@@ -48,17 +48,17 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
         }
 
 
-        //private class HttpControllerTypeResolver : IHttpControllerTypeResolver
-        //{
-        //    public ICollection<Type> GetControllerTypes(IAssembliesResolver _)
-        //    {
-        //        var httpControllerType = typeof(IHttpController);
-        //        return typeof(WebApiConfig)
-        //            .Assembly
-        //            .GetTypes()
-        //            .Where(t => t.IsClass && !t.IsAbstract && httpControllerType.IsAssignableFrom(t))
-        //            .ToList();
-        //    }
-        //}
+        private class HttpControllerTypeResolver : IHttpControllerTypeResolver
+        {
+            public ICollection<Type> GetControllerTypes(IAssembliesResolver _)
+            {
+                var httpControllerType = typeof(IHttpController);
+                return typeof(WebApiConfig)
+                    .Assembly
+                    .GetTypes()
+                    .Where(t => t.IsClass && !t.IsAbstract && httpControllerType.IsAssignableFrom(t))
+                    .ToList();
+            }
+        }
     }
 }

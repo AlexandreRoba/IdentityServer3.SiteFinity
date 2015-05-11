@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using IdentityServer.SiteFinity.Services;
@@ -41,7 +42,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
                 if (idx != -1)
                 {
                     path = result.ReplyUrl.Substring(0, idx);
-                    queryString = new Uri(result.ReplyUrl.Substring(idx + 1)).ParseQueryString();
+                    queryString = ParseQueryString(result.ReplyUrl.Substring(idx + 1));
                 }
                 else
                 {
@@ -51,7 +52,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
                 WrapSWT(queryString, token, message.Deflate);
                 path = String.Concat(path, ToQueryString(queryString));
                 var uri = new Uri(new Uri(result.Realm), path);
-                
+
                 response = new SignInResponseMessage()
                 {
                     IsRedirect = true,
@@ -72,9 +73,9 @@ namespace IdentityServer.SiteFinity.ResponseHandling
 
         }
 
-        private async Task<SimpleWebToken> CreateToken(IEnumerable<Claim> claims,SignInValidationResult result)
+        private async Task<SimpleWebToken> CreateToken(IEnumerable<Claim> claims, SignInValidationResult result)
         {
-            
+
             var key = this.HexToByte(result.SiteFinityRelyingParty.Key);
 
             var sb = new StringBuilder();
@@ -179,5 +180,32 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             }
             return sb.ToString();
         }
+
+        public NameValueCollection ParseQueryString(string s)
+        {
+            NameValueCollection nvc = new NameValueCollection();
+
+            // remove anything other than query string from url
+            if (s.Contains("?"))
+            {
+                s = s.Substring(s.IndexOf('?') + 1);
+            }
+
+            foreach (string vp in Regex.Split(s, "&"))
+            {
+                string[] singlePair = Regex.Split(vp, "=");
+                if (singlePair.Length == 2)
+                {
+                    nvc.Add(singlePair[0], singlePair[1]);
+                }
+                else
+                { // only one key with no value specified in query string
+                    nvc.Add(singlePair[0], string.Empty);
+                }
+            }
+
+            return nvc;
+        }
+
     }
 }

@@ -11,10 +11,10 @@ namespace Host.Config
             {   
                 new SiteFinityRelyingParty
                 {
-                    Name = "SiteFinityWebApp01",
-                    Realm = "http://localhost:60876",
+                    Name = "HelloCrowd",
+                    Realm = "https://localhost:44303/",
                     Enabled = true,
-                    Key = "6CFC44D3F6245339321DD4D7E681306C21E544130ADBB3287EE8878F78B86D6C"
+                    Key = "52ACD69BD85C96F08C74762ED247A4AAFD2174E6B3E7F700630C2DAC5E169D21"
                 }
                 
             };

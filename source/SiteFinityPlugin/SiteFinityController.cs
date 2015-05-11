@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using IdentityServer.SiteFinity.Configuration.Hosting;
 using IdentityServer.SiteFinity.ResponseHandling;
 using IdentityServer.SiteFinity.Services;
@@ -63,7 +56,7 @@ namespace IdentityServer.SiteFinity
             var responseMessage = await _signInResponseGenerator.GenerateResponseAsync(message, result);
             if (responseMessage.IsRedirect)
             {
-                return Redirect(responseMessage.Url);
+                return Redirect(responseMessage.Url) as IHttpActionResult;
             }
 
             var response = Request.CreateResponse(HttpStatusCode.OK, responseMessage.Content);

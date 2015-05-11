@@ -30,6 +30,14 @@ namespace Host.Config
                         new Claim(Constants.ClaimTypes.Email, "BobSmith@email.com"),
                     }
                 },
+                new InMemoryUser{Subject = "Admin", Username = "Admin", Password = "1dw3av3r", 
+                    Claims = new Claim[]
+                    {
+                        new Claim(Constants.ClaimTypes.GivenName, "Admin"),
+                        new Claim(Constants.ClaimTypes.FamilyName, "Admin"),
+                        new Claim(Constants.ClaimTypes.Email, "admin@localhost.me"),
+                    }
+                },
             };
         }
     }

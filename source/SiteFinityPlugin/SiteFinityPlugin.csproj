@@ -88,6 +88,7 @@
     <Compile Include="Configuration\Hosting\AutofacContainerMiddleware.cs" />
     <Compile Include="Configuration\Hosting\AutofacDependencyResolver.cs" />
     <Compile Include="Configuration\Hosting\AutofacScope.cs" />
+    <Compile Include="Configuration\Hosting\KatanaDependencyResolver.cs" />
     <Compile Include="Configuration\Hosting\LibLogTraceListener.cs" />
     <Compile Include="Configuration\Hosting\LogProviderExceptionLogger.cs" />
     <Compile Include="Configuration\RequestResponseLogger.cs" />
