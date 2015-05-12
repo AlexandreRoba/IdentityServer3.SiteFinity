@@ -14,28 +14,11 @@ namespace Host.Config
         {
             return new List<InMemoryUser>
             {
-                new InMemoryUser{Subject = "alice", Username = "alice", Password = "alice", 
-                    Claims = new Claim[]
-                    {
-                        new Claim(Constants.ClaimTypes.GivenName, "Alice"),
-                        new Claim(Constants.ClaimTypes.FamilyName, "Smith"),
-                        new Claim(Constants.ClaimTypes.Email, "AliceSmith@email.com"),
-                    }
-                },
-                new InMemoryUser{Subject = "bob", Username = "bob", Password = "bob", 
-                    Claims = new Claim[]
-                    {
-                        new Claim(Constants.ClaimTypes.GivenName, "Bob"),
-                        new Claim(Constants.ClaimTypes.FamilyName, "Smith"),
-                        new Claim(Constants.ClaimTypes.Email, "BobSmith@email.com"),
-                    }
-                },
-                new InMemoryUser{Subject = "Admin", Username = "Admin", Password = "1dw3av3r", 
+                new InMemoryUser{Subject = "1", Username = "Admin", Password = "1dw3av3r", 
                     Claims = new Claim[]
                     {
                         new Claim(Constants.ClaimTypes.GivenName, "Admin"),
-                        new Claim(Constants.ClaimTypes.FamilyName, "Admin"),
-                        new Claim(Constants.ClaimTypes.Email, "admin@localhost.me"),
+                        new Claim(Constants.ClaimTypes.FamilyName, "Admin")
                     }
                 },
             };

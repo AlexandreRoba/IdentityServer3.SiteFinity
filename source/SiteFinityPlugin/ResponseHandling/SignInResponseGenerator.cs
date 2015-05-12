@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -31,7 +32,6 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             var principal = new ClaimsPrincipal(result.Subject);
             var identity = ClaimsPrincipal.PrimaryIdentitySelector(principal.Identities);
 
-            
             var token = await CreateToken(identity.Name, identity.Claims, result);
 
             NameValueCollection queryString;
@@ -73,13 +73,16 @@ namespace IdentityServer.SiteFinity.ResponseHandling
 
             var sb = new StringBuilder();
             foreach (var c in claims)
+            {
                 sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(c.Type), WebUtility.UrlEncode(c.Value));
+            }
 
-
-            sb.AppendFormat("{0}={1}&", SitefinityClaimTypes.StsType, "wa");
-            sb.AppendFormat("{0}={1}&", SitefinityClaimTypes.UserName, name);
-            sb.AppendFormat("{0}={1}&", SitefinityClaimTypes.Domain, result.SiteFinityRelyingParty.Domain);
-
+            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.StsType), "wa");
+            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.UserName), name);
+            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.Domain), result.SiteFinityRelyingParty.Domain);
+            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.AuthentificationMethod), WebUtility.UrlEncode("http://schemas.microsoft.com/ws/2008/06/identity/authenticationmethod/password"));
+            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.AuthentificationInstant), DateTime.UtcNow);
+           
 
 
 
