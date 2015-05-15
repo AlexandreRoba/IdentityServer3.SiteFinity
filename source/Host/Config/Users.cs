@@ -14,7 +14,7 @@ namespace Host.Config
         {
             return new List<InMemoryUser>
             {
-                new InMemoryUser{Subject = "1", Username = "Admin", Password = "1dw3av3r", 
+                new InMemoryUser{Subject = "1", Username = "Admin", Password = "secret", 
                     Claims = new Claim[]
                     {
                         new Claim(Constants.ClaimTypes.GivenName, "Admin"),
