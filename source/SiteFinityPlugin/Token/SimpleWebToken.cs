@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens;
 using System.Security.Claims;
 
-namespace IdentityServer.SiteFinity
+namespace IdentityServer.SiteFinity.Token
 {
     public class SimpleWebToken : SecurityToken
     {

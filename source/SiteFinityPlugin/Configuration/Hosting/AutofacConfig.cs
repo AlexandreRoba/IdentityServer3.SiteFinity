@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Integration.WebApi;
 using IdentityServer.SiteFinity.ResponseHandling;
+using IdentityServer.SiteFinity.Token;
 using IdentityServer.SiteFinity.Utilities;
 using IdentityServer.SiteFinity.Validation;
 using Microsoft.Owin;

@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using IdentityServer.SiteFinity.Services;
+using IdentityServer.SiteFinity.Token;
 using IdentityServer.SiteFinity.Utilities;
 using IdentityServer.SiteFinity.Validation;
 using Thinktecture.IdentityServer.Core.Logging;
@@ -111,7 +112,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
                 .AppendFormat("TokenId={0}&", _httpUtility.UrlEncode(Guid.NewGuid().ToString()))
                 .AppendFormat("Issuer={0}&", _httpUtility.UrlEncode(result.Issuer))
                 .AppendFormat("Audience={0}&", _httpUtility.UrlEncode(result.Realm))
-                .AppendFormat("ExpiresOn={0:0}", (issueDate - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds + SimpleWebTokenParser.tokenLifeTime);
+                .AppendFormat("ExpiresOn={0:0}", (issueDate - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds + SimpleWebTokenParser.TokenLifeTime);
             //.AppendFormat("IssueDate={0:0}", (issueDate - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
 
             var unsignedToken = sb.ToString();

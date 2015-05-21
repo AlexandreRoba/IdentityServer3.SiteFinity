@@ -8,23 +8,22 @@ namespace IdentityServer.SiteFinity.Token
 {
     public class SimpleWebTokenParser
     {
-        private HttpUtility _httpUtility;
-
+        internal const int TokenLifeTime = 3600;
+        
         public const string IssuerLabel = "Issuer";
         public const string ExpiresLabel = "ExpiresOn";
         //public const string IssueLabel = "IssueDate";
         public const string AudienceLabel = "Audience";
         public const string TokenIdLabel = "TokenId";
         public const string TokenPrefix = "WRAP access_token";
-
-        private  IList<KeyValuePair<string, string>> keyValueCollection;
-        private  DateTime validFrom;
-        internal const int tokenLifeTime = 3600;
+        
+        private readonly HttpUtility _httpUtility;
+        private  IList<KeyValuePair<string, string>> _keyValueCollection;
+        private  DateTime _validFrom;
 
         public SimpleWebTokenParser(HttpUtility httpUtility)
         {
             _httpUtility = httpUtility;
-            
         }
 
         public static string EncryptionLabel
@@ -40,7 +39,7 @@ namespace IdentityServer.SiteFinity.Token
             get
             {
                 return
-                    keyValueCollection.Where(e =>
+                    _keyValueCollection.Where(e =>
                         e.Key != TokenIdLabel &&
                         e.Key != IssuerLabel &&
                         e.Key != ExpiresLabel &&
@@ -51,17 +50,17 @@ namespace IdentityServer.SiteFinity.Token
             }
         }
 
-        public string TokenId { get { return keyValueCollection.First(p => p.Key == TokenIdLabel).Value; } }
+        public string TokenId { get { return _keyValueCollection.First(p => p.Key == TokenIdLabel).Value; } }
 
-        public string Issuer { get { return keyValueCollection.First(p => p.Key == IssuerLabel).Value; } }
+        public string Issuer { get { return _keyValueCollection.First(p => p.Key == IssuerLabel).Value; } }
 
-        public string Audience { get { return keyValueCollection.First(p => p.Key == AudienceLabel).Value; } }
+        public string Audience { get { return _keyValueCollection.First(p => p.Key == AudienceLabel).Value; } }
 
         public DateTime ExpiresOn
         {
             get
             {
-                int expiresOn = Convert.ToInt32(keyValueCollection.First(p => p.Key == ExpiresLabel).Value);
+                int expiresOn = Convert.ToInt32(_keyValueCollection.First(p => p.Key == ExpiresLabel).Value);
                 var epoc = new DateTime(1970, 1, 1, 0, 0, 0, 0);
 
                 return epoc.AddSeconds(expiresOn);
@@ -73,7 +72,7 @@ namespace IdentityServer.SiteFinity.Token
         {
             get
             {
-                return this.ExpiresOn.AddSeconds(-tokenLifeTime);
+                return this.ExpiresOn.AddSeconds(-TokenLifeTime);
                 //var key = keyValueCollection.FirstOrDefault(p => p.Key == IssueLabel);
                 //if (!string.IsNullOrEmpty(key.Value))
                 //{
@@ -135,8 +134,8 @@ namespace IdentityServer.SiteFinity.Token
 
         public  SimpleWebToken GetToken(string rawToken)
         {
-             validFrom = DateTime.UtcNow;
-             keyValueCollection = Parse(rawToken);
+             _validFrom = DateTime.UtcNow;
+             _keyValueCollection = Parse(rawToken);
              return new SimpleWebToken(TokenId, Issuer, Audience, ValidFrom, ExpiresOn, Claims, rawToken);
         }
     }
