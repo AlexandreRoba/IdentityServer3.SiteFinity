@@ -97,7 +97,7 @@
     <Compile Include="Services\InMemorySiteFinityRelyingPartyService.cs" />
     <Compile Include="Services\ISiteFinityRelyingPartyService.cs" />
     <Compile Include="Services\SignInRequestMessage.cs" />
-    <Compile Include="SwtParser.cs" />
+    <Compile Include="SimpleWebTokenParser.cs" />
     <Compile Include="Configuration\Hosting\NoCacheAttributecs.cs" />
     <Compile Include="Models\SiteFinityRelyingParty.cs" />
     <Compile Include="SitefinityClaimTypes.cs" />
@@ -108,6 +108,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleWebToken.cs" />
     <Compile Include="SiteFinityController.cs" />
+    <Compile Include="Utilities\HttpUtility.cs" />
     <Compile Include="Validation\SignInValidationResult.cs" />
     <Compile Include="Validation\SignInValidator.cs" />
   </ItemGroup>

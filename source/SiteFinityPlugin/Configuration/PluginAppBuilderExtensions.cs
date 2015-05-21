@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IdentityServer.SiteFinity.Configuration.Hosting;
+using Microsoft.Owin.Infrastructure;
 using Owin;
 
 namespace IdentityServer.SiteFinity.Configuration
@@ -37,7 +34,7 @@ namespace IdentityServer.SiteFinity.Configuration
                 //});
 
                 sitefinityApp.Use<AutofacContainerMiddleware>(AutofacConfig.Configure(options));
-                Microsoft.Owin.Infrastructure.SignatureConversions.AddConversions(app);
+                SignatureConversions.AddConversions(app);
                 sitefinityApp.UseWebApi(WebApiConfig.Configure(options));
             });
 

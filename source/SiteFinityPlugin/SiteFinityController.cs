@@ -9,6 +9,7 @@ using System.Web.Http.Results;
 using IdentityServer.SiteFinity.Configuration.Hosting;
 using IdentityServer.SiteFinity.ResponseHandling;
 using IdentityServer.SiteFinity.Services;
+using IdentityServer.SiteFinity.Utilities;
 using IdentityServer.SiteFinity.Validation;
 using Thinktecture.IdentityServer.Core;
 using Thinktecture.IdentityServer.Core.Extensions;
@@ -27,11 +28,13 @@ namespace IdentityServer.SiteFinity
 
         private readonly SignInValidator _validator;
         private readonly SignInResponseGenerator _signInResponseGenerator;
+        private readonly HttpUtility _httpUtility;
 
-        public SiteFinityController(SignInValidator validator, SignInResponseGenerator signInResponseGenerator)
+        public SiteFinityController(SignInValidator validator, SignInResponseGenerator signInResponseGenerator,HttpUtility httpUtility)
         {
             _validator = validator;
             _signInResponseGenerator = signInResponseGenerator;
+            _httpUtility = httpUtility;
         }
 
         [Route("")]

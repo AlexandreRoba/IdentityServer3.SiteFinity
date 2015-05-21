@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
 using IdentityServer.SiteFinity.Services;
+using IdentityServer.SiteFinity.Utilities;
 using IdentityServer.SiteFinity.Validation;
 using Thinktecture.IdentityServer.Core.Logging;
 
@@ -24,6 +25,15 @@ namespace IdentityServer.SiteFinity.ResponseHandling
     public class SignInResponseGenerator
     {
         private readonly static ILog Logger = LogProvider.GetCurrentClassLogger();
+        private readonly HttpUtility _httpUtility;
+        private readonly SimpleWebTokenParser _simpleWebTokenParser;
+
+        public SignInResponseGenerator(HttpUtility httpUtility, SimpleWebTokenParser simpleWebTokenParser)
+        {
+            _httpUtility = httpUtility;
+            _simpleWebTokenParser = simpleWebTokenParser;
+        }
+
 
         public async Task<IHttpActionResult> GenerateResponseAsync(SignInRequestMessage message, SignInValidationResult result,HttpRequestMessage request)
         {
@@ -74,14 +84,14 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             var sb = new StringBuilder();
             foreach (var c in claims)
             {
-                sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(c.Type), WebUtility.UrlEncode(c.Value));
+                sb.AppendFormat("{0}={1}&", _httpUtility.UrlEncode(c.Type), _httpUtility.UrlEncode(c.Value));
             }
 
-            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.StsType), "wa");
-            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.UserName), name);
-            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.Domain), result.SiteFinityRelyingParty.Domain);
-            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.AuthentificationMethod), WebUtility.UrlEncode("http://schemas.microsoft.com/ws/2008/06/identity/authenticationmethod/password"));
-            sb.AppendFormat("{0}={1}&", WebUtility.UrlEncode(SitefinityClaimTypes.AuthentificationInstant), DateTime.UtcNow);
+            sb.AppendFormat("{0}={1}&", _httpUtility.UrlEncode(SitefinityClaimTypes.StsType), "wa");
+            sb.AppendFormat("{0}={1}&", _httpUtility.UrlEncode(SitefinityClaimTypes.UserName), name);
+            sb.AppendFormat("{0}={1}&", _httpUtility.UrlEncode(SitefinityClaimTypes.Domain), result.SiteFinityRelyingParty.Domain);
+            sb.AppendFormat("{0}={1}&", _httpUtility.UrlEncode(SitefinityClaimTypes.AuthentificationMethod), _httpUtility.UrlEncode("http://schemas.microsoft.com/ws/2008/06/identity/authenticationmethod/password"));
+            sb.AppendFormat("{0}={1}&", _httpUtility.UrlEncode(SitefinityClaimTypes.AuthentificationInstant), DateTime.UtcNow);
            
 
 
@@ -98,10 +108,10 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             }
 
             sb
-                .AppendFormat("TokenId={0}&", WebUtility.UrlEncode(Guid.NewGuid().ToString()))
-                .AppendFormat("Issuer={0}&", WebUtility.UrlEncode(result.Issuer))
-                .AppendFormat("Audience={0}&", WebUtility.UrlEncode(result.Realm))
-                .AppendFormat("ExpiresOn={0:0}", (issueDate - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds + SwtParser.tokenLifeTime);
+                .AppendFormat("TokenId={0}&", _httpUtility.UrlEncode(Guid.NewGuid().ToString()))
+                .AppendFormat("Issuer={0}&", _httpUtility.UrlEncode(result.Issuer))
+                .AppendFormat("Audience={0}&", _httpUtility.UrlEncode(result.Realm))
+                .AppendFormat("ExpiresOn={0:0}", (issueDate - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds + SimpleWebTokenParser.tokenLifeTime);
             //.AppendFormat("IssueDate={0:0}", (issueDate - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
 
             var unsignedToken = sb.ToString();
@@ -111,9 +121,9 @@ namespace IdentityServer.SiteFinity.ResponseHandling
 
             string signedToken = String.Format("{0}&HMACSHA256={1}",
                 unsignedToken,
-                WebUtility.UrlEncode(Convert.ToBase64String(sig)));
+                _httpUtility.UrlEncode(Convert.ToBase64String(sig)));
 
-            return new SimpleWebToken(signedToken);
+            return  _simpleWebTokenParser.GetToken(signedToken);
         }
 
         private byte[] HexToByte(string hexString)
@@ -133,7 +143,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
                 rawToken = Convert.ToBase64String(zipped);
                 collection["wrap_deflated"] = "true";
             }
-            collection["wrap_access_token"] = WebUtility.UrlEncode(rawToken);
+            collection["wrap_access_token"] = _httpUtility.UrlEncode(rawToken);
             var seconds = Convert.ToInt32((token.ValidTo - token.ValidFrom).TotalSeconds);
             collection["wrap_access_token_expires_in"] = seconds.ToString();
         }

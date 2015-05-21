@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Integration.WebApi;
 using IdentityServer.SiteFinity.ResponseHandling;
+using IdentityServer.SiteFinity.Utilities;
 using IdentityServer.SiteFinity.Validation;
 using Microsoft.Owin;
 using Thinktecture.IdentityServer.Core.Configuration;
@@ -26,6 +27,12 @@ namespace IdentityServer.SiteFinity.Configuration.Hosting
             // mandatory from factory
             builder.Register(factory.UserService);
             builder.Register(factory.SiteFinityRelyingPartyService);
+
+            // Utilities
+            builder.RegisterType<HttpUtility>().AsSelf();
+
+            //Token parser
+            builder.RegisterType<SimpleWebTokenParser>().AsSelf();
 
             // validators
             builder.RegisterType<SignInValidator>().AsSelf();

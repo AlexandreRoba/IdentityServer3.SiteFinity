@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
+using IdentityServer.SiteFinity.Utilities;
 
-namespace IdentityServer.SiteFinity
+namespace IdentityServer.SiteFinity.Token
 {
-    public class SwtParser
+    public class SimpleWebTokenParser
     {
+        private HttpUtility _httpUtility;
+
         public const string IssuerLabel = "Issuer";
         public const string ExpiresLabel = "ExpiresOn";
         //public const string IssueLabel = "IssueDate";
@@ -15,14 +17,14 @@ namespace IdentityServer.SiteFinity
         public const string TokenIdLabel = "TokenId";
         public const string TokenPrefix = "WRAP access_token";
 
-        private readonly IList<KeyValuePair<string, string>> keyValueCollection;
-        private readonly DateTime validFrom;
+        private  IList<KeyValuePair<string, string>> keyValueCollection;
+        private  DateTime validFrom;
         internal const int tokenLifeTime = 3600;
 
-        public SwtParser(string urlDecodedSWT)
+        public SimpleWebTokenParser(HttpUtility httpUtility)
         {
-            this.validFrom = DateTime.UtcNow;
-            keyValueCollection = Parse(urlDecodedSWT);
+            _httpUtility = httpUtility;
+            
         }
 
         public static string EncryptionLabel
@@ -83,7 +85,7 @@ namespace IdentityServer.SiteFinity
             }
         }
 
-        public static IList<KeyValuePair<string, string>> Parse(string token)
+        public IList<KeyValuePair<string, string>> Parse(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
@@ -109,7 +111,7 @@ namespace IdentityServer.SiteFinity
                         throw new ArgumentException("Invalid formEncodedstring - contains a name/value pair missing an = character", nameValue.Length > 0 ? nameValue[0] : "");
                     }
 
-                    dict.Add(new KeyValuePair<string, string>(WebUtility.UrlDecode(nameValue[0]), WebUtility.UrlDecode(nameValue[1])));
+                    dict.Add(new KeyValuePair<string, string>(_httpUtility.UrlDecode(nameValue[0]), _httpUtility.UrlDecode(nameValue[1])));
                     return dict;
                 });
         }
@@ -129,6 +131,13 @@ namespace IdentityServer.SiteFinity
 
             var accessToken = authorizationHeader.TrimStart('=', ' ').Trim('"');
             return accessToken;
+        }
+
+        public  SimpleWebToken GetToken(string rawToken)
+        {
+             validFrom = DateTime.UtcNow;
+             keyValueCollection = Parse(rawToken);
+             return new SimpleWebToken(TokenId, Issuer, Audience, ValidFrom, ExpiresOn, Claims, rawToken);
         }
     }
 }
