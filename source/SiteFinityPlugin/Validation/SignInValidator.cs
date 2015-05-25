@@ -28,12 +28,32 @@ namespace IdentityServer.SiteFinity.Validation
             {
                 result.Realm = message.Realm;
             }
-            
+
+            if (message.SignOut)
+            {
+                if (!subject.Identity.IsAuthenticated)
+                {
+                    LogError("Signout requested for user not signed in.",result);
+
+                    return new SignInValidationResult
+                    {
+                        IsError = true,
+                        Error = "signout_requested_when_not_signedin"
+                    };
+                }
+                return new SignInValidationResult
+                {
+                    IsSignout = true,
+                };
+            }
+
             if (!subject.Identity.IsAuthenticated)
             {
                 result.IsSignInRequired = true;
                 return result;
             }
+
+            
 
             var rp = await _siteFinityRelyingPartyService.GetByRealmAsync(message.Realm);
 

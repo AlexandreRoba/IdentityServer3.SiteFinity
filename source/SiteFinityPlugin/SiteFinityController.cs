@@ -44,6 +44,12 @@ namespace IdentityServer.SiteFinity
 
             var result = await _validator.ValidateAsync(Request.RequestUri.AbsoluteUri, message, User as ClaimsPrincipal);
 
+            if (result.IsSignout)
+            {
+                var url = this.Request.GetOwinContext().Environment.GetIdentityServerLogoutUrl();
+                return Redirect(url);
+            }
+
             if (result.IsSignInRequired)
             {
                 Logger.Info("Redirect to login page");

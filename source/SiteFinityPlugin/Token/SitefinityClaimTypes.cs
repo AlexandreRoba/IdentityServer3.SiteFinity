@@ -1,4 +1,4 @@
-﻿namespace IdentityServer.SiteFinity
+﻿namespace IdentityServer.SiteFinity.Token
 {
     public static class SitefinityClaimTypes
     {

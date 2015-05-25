@@ -16,5 +16,6 @@ namespace IdentityServer.SiteFinity.Validation
         public ClaimsPrincipal Subject { get; set; }
         public string ReplyUrl { get; set; }
         public string Issuer { get; set; }
+        public bool IsSignout { get; set; }
     }
 }

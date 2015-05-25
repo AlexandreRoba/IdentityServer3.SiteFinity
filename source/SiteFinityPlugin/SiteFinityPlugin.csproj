@@ -100,7 +100,7 @@
     <Compile Include="Token\SimpleWebTokenParser.cs" />
     <Compile Include="Configuration\Hosting\NoCacheAttributecs.cs" />
     <Compile Include="Models\SiteFinityRelyingParty.cs" />
-    <Compile Include="SitefinityClaimTypes.cs" />
+    <Compile Include="Token\SitefinityClaimTypes.cs" />
     <Compile Include="Configuration\Hosting\WebApiConfig.cs" />
     <Compile Include="Configuration\PluginAppBuilderExtensions.cs" />
     <Compile Include="Configuration\SiteFinityPluginOptions.cs" />
