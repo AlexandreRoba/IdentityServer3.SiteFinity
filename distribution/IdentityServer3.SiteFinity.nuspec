@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>IdentityServer3.WsFederation</id>
+    <version>0.0.0</version>
+    <title>IdentityServer3 - SiteFinity Plugin</title>
+    <authors>Alexandre Roba</authors>
+    <owners>Alexandre Roba</owners>
+    <projectUrl>https://github.com/AlexandreRoba/IdentityServer3.SiteFinity</projectUrl>
+    <iconUrl>https://identityserver.github.io/Documentation/assets/images/icons/IDserver_icon128.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/AlexandreRoba/IdentityServer3.SiteFinity/blob/master/LICENSE</licenseUrl>
+    <description>Plugin for adding Telerik Sitefinity Identity Provider capabilities to IdentityServer3</description>
+    <copyright>Copyright 2015</copyright>
+    <tags>Thinktecture IdentityServer OpenID Connect OpenIDConnect OAuth2 OWIN ASP.NET Katana WebApi SSO Federation Claims Identity SiteFinity Telerik</tags>
+
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.IdentityModel" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.IdentityModel.Services" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Web" targetFramework="net45" />
+    </frameworkAssemblies>
+
+    <dependencies>
+      <dependency id="Owin" version="1.0"/>
+      <dependency id="Thinktecture.IdentityServer3" version="1.1.0" /> 
+    </dependencies>
+  </metadata>
+</package>

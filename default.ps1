@@ -8,7 +8,7 @@ properties {
 	$framework_version = "v4.5"
 	$nunit_path = "$src_directory\packages\NUnit.Runners.2.6.4\tools\nunit.exe"
 	$ilmerge_path = "$src_directory\packages\ilmerge.2.14.1208\tools\ILMerge.exe"
-	$nuget_path = "$src_directory\source\.nuget\Nugetnuget.exe"
+	$nuget_path = "$src_directory\.nuget\nuget.exe"
 	
 	$buildNumber = 0;
 	$version = "1.0.0.0"

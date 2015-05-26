@@ -5,6 +5,9 @@ using System.Security.Claims;
 
 namespace IdentityServer.SiteFinity.Token
 {
+    /// <summary>
+    /// SimpleWeb Token class
+    /// </summary>
     public class SimpleWebToken : SecurityToken
     {
 
@@ -33,7 +36,9 @@ namespace IdentityServer.SiteFinity.Token
             RawToken = rawToken;
         }
 
-
+        /// <summary>
+        /// Gets the token id
+        /// </summary>
         public override string Id
         {
             get
@@ -47,6 +52,9 @@ namespace IdentityServer.SiteFinity.Token
             get { return new List<SecurityKey>().AsReadOnly(); }
         }
 
+        /// <summary>
+        /// Gets the Valid From date
+        /// </summary>
         public override DateTime ValidFrom
         {
             get
@@ -55,6 +63,9 @@ namespace IdentityServer.SiteFinity.Token
             }
         }
 
+        /// <summary>
+        /// Gets the Valid to Date
+        /// </summary>
         public override DateTime ValidTo
         {
             get
@@ -63,12 +74,24 @@ namespace IdentityServer.SiteFinity.Token
             }
         }
 
+        /// <summary>
+        /// Gets the Issuer realm
+        /// </summary>
         public string Issuer { get; private set; }
 
+        /// <summary>
+        /// Gets the audience realm
+        /// </summary>
         public string Audience { get; private set; }
 
+        /// <summary>
+        /// Gets the list of Claims in the token
+        /// </summary>
         public IList<Claim> Claims { get; private set; }
 
+        /// <summary>
+        /// Gets the Raw version of the token
+        /// </summary>
         public string RawToken { get; private set; }
     }
 

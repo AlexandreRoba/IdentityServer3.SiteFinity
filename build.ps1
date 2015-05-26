@@ -19,6 +19,6 @@ if(Test-Path Env:\APPVEYOR_BUILD_NUMBER){
 
 "Build number $buildNumber"
 
-Invoke-Psake .\default.ps1 $task -framework "4.0x64" -properties @{ buildNumber=$buildNumber; preRelease=$preRelease }
+Invoke-Psake .\default.ps1 $task -framework "4.5.1x64" -properties @{ buildNumber=$buildNumber; preRelease=$preRelease }
 
 Remove-Module psake

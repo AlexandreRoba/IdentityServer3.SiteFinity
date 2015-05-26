@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IdentityServer3.SiteFinity</name>
+    </assembly>
+    <members>
+        <member name="T:IdentityServer.SiteFinity.Services.InMemoryRelyingPartyService">
+            <summary>
+            In-memory service for relying party configuration
+            </summary>
+        </member>
+        <member name="T:IdentityServer.SiteFinity.Services.ISiteFinityRelyingPartyService">
+            <summary>
+            Implements retrieval of SiteFinity relying party configuration
+            </summary>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Services.ISiteFinityRelyingPartyService.GetByRealmAsync(System.String)">
+            <summary>
+            Retrieves a sitefinity relying party by realm.
+            </summary>
+            <param name="realm">The realm.</param>
+            <returns>The sitefinity relying party</returns>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Services.InMemoryRelyingPartyService.#ctor(System.Collections.Generic.IEnumerable{IdentityServer.SiteFinity.Models.SiteFinityRelyingParty})">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityServer.SiteFinity.Services.InMemoryRelyingPartyService"/> class.
+            </summary>
+            <param name="rps">The RPS.</param>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Services.InMemoryRelyingPartyService.GetByRealmAsync(System.String)">
+            <summary>
+            Retrieves a relying party by realm.
+            </summary>
+            <param name="realm">The realm.</param>
+            <returns>
+            The relying party
+            </returns>
+        </member>
+        <member name="T:IdentityServer.SiteFinity.Models.SiteFinityRelyingParty">
+            <summary>
+            Models a Sitefinity Site
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Models.SiteFinityRelyingParty.Name">
+            <summary>
+            Gets or sets the display name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Models.SiteFinityRelyingParty.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:IdentityServer.SiteFinity.Models.SiteFinityRelyingParty"/> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Models.SiteFinityRelyingParty.Realm">
+            <summary>
+            Gets or sets the realm.
+            </summary>
+            <value>
+            The realm.
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Models.SiteFinityRelyingParty.ReplyUrl">
+            <summary>
+            Get or set the allowed reply url
+            </summary>
+            <value>
+            The reply url
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Models.SiteFinityRelyingParty.Key">
+            <summary>
+            Gets or sets the Sitefinity ShareSecret
+            </summary>
+            <value>
+            The SiteFinity Secret Key
+            </value>
+        </member>
+        <member name="T:IdentityServer.SiteFinity.Configuration.PluginAppBuilderExtensions">
+            <summary>
+            Extension methods for IAppBuilder to configure the WS-Federation plugin
+            </summary>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Configuration.PluginAppBuilderExtensions.UseSiteFinityPlugin(Owin.IAppBuilder,IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions)">
+            <summary>
+            Add the WS-Federation plugin to the IdentityServer pipeline.
+            </summary>
+            <param name="app">The appBuilder.</param>
+            <param name="options">The options.</param>
+            <returns>The appBuilder</returns>
+            <exception cref="T:System.ArgumentNullException">options</exception>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions"/> class.
+            </summary>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions.#ctor(Thinktecture.IdentityServer.Core.Configuration.IdentityServerOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions"/> class.
+            Assigns the IdentityServerOptions and the Factory from the IdentityServerOptions.
+            </summary>
+            <param name="options">The options.</param>
+            <exception cref="T:System.ArgumentNullException">options</exception>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions.Validate">
+            <summary>
+            Validates this instance.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Factory not configured
+            or
+            DataProtector not configured
+            or
+            Options not configured
+            </exception>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions.IdentityServerOptions">
+            <summary>
+            Gets or sets the identity server options.
+            </summary>
+            <value>
+            The identity server options.
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions.MapPath">
+            <summary>
+            Gets or sets the map path.
+            </summary>
+            <value>
+            The map path.
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Configuration.SiteFinityPluginOptions.Factory">
+            <summary>
+            Gets or sets the WS-Federation service factory.
+            </summary>
+            <value>
+            The factory.
+            </value>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Configuration.SiteFinityServiceFactory.Register``1(Thinktecture.IdentityServer.Core.Configuration.Registration{``0})">
+            <summary>
+            Adds a registration to the dependency list
+            </summary>
+            <typeparam name="T">Type of the dependency</typeparam>
+            <param name="registration">The registration.</param>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Configuration.SiteFinityServiceFactory.#ctor(Thinktecture.IdentityServer.Core.Configuration.IdentityServerServiceFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IdentityServer.SiteFinity.Configuration.SiteFinityServiceFactory"/> class.
+            </summary>
+            <param name="factory">The factory.</param>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Configuration.SiteFinityServiceFactory.Validate">
+            <summary>
+            Validates this instance.
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Configuration.SiteFinityServiceFactory.UserService">
+            <summary>
+            Gets or sets the user service.
+            </summary>
+            <value>
+            The user service.
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Configuration.SiteFinityServiceFactory.Registrations">
+            <summary>
+            Gets the a list of additional dependencies.
+            </summary>
+            <value>
+            The dependencies.
+            </value>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Configuration.SiteFinityServiceFactory.SiteFinityRelyingPartyService">
+            <summary>
+            Gets or sets the SiteFinity relying party service.
+            </summary>
+            <value>
+            The relying party service.
+            </value>
+        </member>
+        <member name="T:IdentityServer.SiteFinity.Token.SimpleWebToken">
+            <summary>
+            SimpleWeb Token class
+            </summary>
+        </member>
+        <member name="M:IdentityServer.SiteFinity.Token.SimpleWebToken.#ctor(System.String,System.String,System.String,System.DateTime,System.DateTime,System.Collections.Generic.IList{System.Security.Claims.Claim},System.String)">
+            <summary>
+            Creates a new instance of SimpleWebToken
+            </summary>
+            <param name="tokenId"></param>
+            <param name="issuer"></param>
+            <param name="audience"></param>
+            <param name="validFrom"></param>
+            <param name="validTo"></param>
+            <param name="claims"></param>
+            <param name="rawToken"></param>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Token.SimpleWebToken.Id">
+            <summary>
+            Gets the token id
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Token.SimpleWebToken.ValidFrom">
+            <summary>
+            Gets the Valid From date
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Token.SimpleWebToken.ValidTo">
+            <summary>
+            Gets the Valid to Date
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Token.SimpleWebToken.Issuer">
+            <summary>
+            Gets the Issuer realm
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Token.SimpleWebToken.Audience">
+            <summary>
+            Gets the audience realm
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Token.SimpleWebToken.Claims">
+            <summary>
+            Gets the list of Claims in the token
+            </summary>
+        </member>
+        <member name="P:IdentityServer.SiteFinity.Token.SimpleWebToken.RawToken">
+            <summary>
+            Gets the Raw version of the token
+            </summary>
+        </member>
+    </members>
+</doc>
