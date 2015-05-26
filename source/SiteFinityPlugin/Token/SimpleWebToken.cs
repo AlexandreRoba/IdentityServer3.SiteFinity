@@ -46,7 +46,9 @@ namespace IdentityServer.SiteFinity.Token
                 return _tokenId;
             }
         }
-
+        /// <summary>
+        /// The list of security keys
+        /// </summary>
         public override System.Collections.ObjectModel.ReadOnlyCollection<SecurityKey> SecurityKeys
         {
             get { return new List<SecurityKey>().AsReadOnly(); }

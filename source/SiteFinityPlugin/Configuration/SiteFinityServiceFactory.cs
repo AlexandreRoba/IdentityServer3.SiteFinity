@@ -7,6 +7,9 @@ using Thinktecture.IdentityServer.Core.Services;
 
 namespace IdentityServer.SiteFinity.Configuration
 {
+    /// <summary>
+    /// The factory for the sitefinity plugin 
+    /// </summary>
     public class SiteFinityServiceFactory
     {
         private static readonly ILog Logger = LogProvider.GetCurrentClassLogger();

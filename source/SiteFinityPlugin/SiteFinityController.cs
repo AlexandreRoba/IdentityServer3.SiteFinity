@@ -18,6 +18,9 @@ using Thinktecture.IdentityServer.Core.Models;
 
 namespace IdentityServer.SiteFinity
 {
+    /// <summary>
+    /// The Controller that handles the SignRequest
+    /// </summary>
     [NoCache]
     [HostAuthentication(Constants.PrimaryAuthenticationType)]
     [RoutePrefix("")]
@@ -30,13 +33,27 @@ namespace IdentityServer.SiteFinity
         private readonly SignInResponseGenerator _signInResponseGenerator;
         private readonly HttpUtility _httpUtility;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="validator">The validator class</param>
+        /// <param name="signInResponseGenerator">The response generator</param>
+        /// <param name="httpUtility">The utily class used for url encoding and url decoding</param>
         public SiteFinityController(SignInValidator validator, SignInResponseGenerator signInResponseGenerator,HttpUtility httpUtility)
         {
             _validator = validator;
             _signInResponseGenerator = signInResponseGenerator;
             _httpUtility = httpUtility;
         }
-
+        /// <summary>
+        /// The default Get route
+        /// </summary>
+        /// <param name="realm">The request realm</param>
+        /// <param name="tokenType">The token type</param>
+        /// <param name="redirect_uri">the url to redirect the user to</param>
+        /// <param name="deflate">A flag that indicate if the request is defalted</param>
+        /// <param name="sign_out">A flag that indicate if it is a sign out request</param>
+        /// <returns>The response</returns>
         [Route("")]
         public async Task<IHttpActionResult> Get(string realm = "", string tokenType = "", string redirect_uri = "", bool deflate = false, bool sign_out = false)
         {

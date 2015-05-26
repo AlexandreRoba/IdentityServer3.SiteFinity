@@ -6,35 +6,44 @@ using IdentityServer.SiteFinity.Utilities;
 
 namespace IdentityServer.SiteFinity.Token
 {
+    /// <summary>
+    /// The parser for SimpleWebToken
+    /// </summary>
     public class SimpleWebTokenParser
     {
         internal const int TokenLifeTime = 3600;
         
-        public const string IssuerLabel = "Issuer";
-        public const string ExpiresLabel = "ExpiresOn";
+        private const string IssuerLabel = "Issuer";
+        private const string ExpiresLabel = "ExpiresOn";
         //public const string IssueLabel = "IssueDate";
-        public const string AudienceLabel = "Audience";
-        public const string TokenIdLabel = "TokenId";
-        public const string TokenPrefix = "WRAP access_token";
+        private const string AudienceLabel = "Audience";
+        private const string TokenIdLabel = "TokenId";
+        private const string TokenPrefix = "WRAP access_token";
         
         private readonly HttpUtility _httpUtility;
         private  IList<KeyValuePair<string, string>> _keyValueCollection;
         private  DateTime _validFrom;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="httpUtility">the utility class that should be used for url encoding and url decoding</param>
         public SimpleWebTokenParser(HttpUtility httpUtility)
         {
             _httpUtility = httpUtility;
         }
-
-        public static string EncryptionLabel
+        /// <summary>
+        /// Gets the encryption used for the token
+        /// </summary>
+        private static string EncryptionLabel
         {
             get
             {
                 return "HMACSHA1";
             }
         }
-
-        public List<Claim> Claims
+        
+        private List<Claim> Claims
         {
             get
             {
@@ -50,13 +59,13 @@ namespace IdentityServer.SiteFinity.Token
             }
         }
 
-        public string TokenId { get { return _keyValueCollection.First(p => p.Key == TokenIdLabel).Value; } }
+        private string TokenId { get { return _keyValueCollection.First(p => p.Key == TokenIdLabel).Value; } }
 
-        public string Issuer { get { return _keyValueCollection.First(p => p.Key == IssuerLabel).Value; } }
+        private string Issuer { get { return _keyValueCollection.First(p => p.Key == IssuerLabel).Value; } }
 
-        public string Audience { get { return _keyValueCollection.First(p => p.Key == AudienceLabel).Value; } }
+        private string Audience { get { return _keyValueCollection.First(p => p.Key == AudienceLabel).Value; } }
 
-        public DateTime ExpiresOn
+        private DateTime ExpiresOn
         {
             get
             {
@@ -68,7 +77,7 @@ namespace IdentityServer.SiteFinity.Token
             }
         }
 
-        public DateTime ValidFrom
+        private DateTime ValidFrom
         {
             get
             {
@@ -84,7 +93,7 @@ namespace IdentityServer.SiteFinity.Token
             }
         }
 
-        public IList<KeyValuePair<string, string>> Parse(string token)
+        private IList<KeyValuePair<string, string>> Parse(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
@@ -115,6 +124,11 @@ namespace IdentityServer.SiteFinity.Token
                 });
         }
 
+        /// <summary>
+        /// Extract and decode the access token
+        /// </summary>
+        /// <param name="authorizationHeader">The authorization header</param>
+        /// <returns>The decoded acces token</returns>
         public static string ExtractAndDecodeAccessToken(string authorizationHeader)
         {
             if (string.IsNullOrEmpty(authorizationHeader) ||
@@ -132,6 +146,11 @@ namespace IdentityServer.SiteFinity.Token
             return accessToken;
         }
 
+        /// <summary>
+        /// Gets the token from raw version of the token
+        /// </summary>
+        /// <param name="rawToken">The raw token</param>
+        /// <returns>A Simple web token</returns>
         public  SimpleWebToken GetToken(string rawToken)
         {
              _validFrom = DateTime.UtcNow;

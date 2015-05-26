@@ -3,6 +3,9 @@ using Thinktecture.IdentityServer.Core.Configuration;
 
 namespace IdentityServer.SiteFinity.Configuration
 {
+    /// <summary>
+    /// The options available for the Sitefinity Plugin
+    /// </summary>
     public class SiteFinityPluginOptions
     {
         /// <summary>

@@ -23,19 +23,33 @@ using Thinktecture.IdentityServer.Core.Logging;
 
 namespace IdentityServer.SiteFinity.ResponseHandling
 {
+    /// <summary>
+    /// SignIn Response Generator
+    /// </summary>
     public class SignInResponseGenerator
     {
         private readonly static ILog Logger = LogProvider.GetCurrentClassLogger();
         private readonly HttpUtility _httpUtility;
         private readonly SimpleWebTokenParser _simpleWebTokenParser;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="httpUtility">The utility class used to url encode and decode</param>
+        /// <param name="simpleWebTokenParser">the parser class used to parse the simple web token</param>
         public SignInResponseGenerator(HttpUtility httpUtility, SimpleWebTokenParser simpleWebTokenParser)
         {
             _httpUtility = httpUtility;
             _simpleWebTokenParser = simpleWebTokenParser;
         }
 
-
+        /// <summary>
+        /// Generate the reponse async
+        /// </summary>
+        /// <param name="message">The request input message</param>
+        /// <param name="result">The validation result</param>
+        /// <param name="request">The original http request</param>
+        /// <returns></returns>
         public async Task<IHttpActionResult> GenerateResponseAsync(SignInRequestMessage message, SignInValidationResult result,HttpRequestMessage request)
         {
             Logger.Info("Creating SiteFinity signin response");
@@ -43,7 +57,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             var principal = new ClaimsPrincipal(result.Subject);
             var identity = ClaimsPrincipal.PrimaryIdentitySelector(principal.Identities);
 
-            var token = await CreateToken(identity.Name, identity.Claims, result);
+            var token =  CreateToken(identity.Name, identity.Claims, result);
 
             NameValueCollection queryString;
             if (!String.IsNullOrEmpty(result.ReplyUrl))
@@ -77,7 +91,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
 
         }
 
-        private async Task<SimpleWebToken> CreateToken(string name,IEnumerable<Claim> claims, SignInValidationResult result)
+        private SimpleWebToken CreateToken(string name,IEnumerable<Claim> claims, SignInValidationResult result)
         {
 
             var key = this.HexToByte(result.SiteFinityRelyingParty.Key);
@@ -194,7 +208,7 @@ namespace IdentityServer.SiteFinity.ResponseHandling
             return sb.ToString();
         }
 
-        public NameValueCollection ParseQueryString(string s)
+        private NameValueCollection ParseQueryString(string s)
         {
             NameValueCollection nvc = new NameValueCollection();
 

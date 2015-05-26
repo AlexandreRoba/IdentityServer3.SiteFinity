@@ -8,17 +8,31 @@ using Thinktecture.IdentityServer.Core.Logging;
 
 namespace IdentityServer.SiteFinity.Validation
 {
+    /// <summary>
+    /// Class used to validate a sign in request
+    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class SignInValidator
     {
         private static readonly ILog Logger = LogProvider.GetCurrentClassLogger();
         private readonly ISiteFinityRelyingPartyService _siteFinityRelyingPartyService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="siteFinityRelyingPartyService">The Relying party used for the validation</param>
         public SignInValidator(ISiteFinityRelyingPartyService siteFinityRelyingPartyService)
         {
             _siteFinityRelyingPartyService = siteFinityRelyingPartyService;
         }
 
+        /// <summary>
+        /// This method validates the Sign in request
+        /// </summary>
+        /// <param name="requestAbsoluteUri">the url of the request</param>
+        /// <param name="message">the sign in request message</param>
+        /// <param name="subject">The sign in subject</param>
+        /// <returns>The validation result</returns>
         public async Task<SignInValidationResult> ValidateAsync(string requestAbsoluteUri, SignInRequestMessage message, ClaimsPrincipal subject)
         {
             Logger.Info("Start SiteFinity signin request validation");

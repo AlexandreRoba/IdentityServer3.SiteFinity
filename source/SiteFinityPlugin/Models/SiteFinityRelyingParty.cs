@@ -45,8 +45,16 @@
         /// </value>
         public string Key { get; set; }
 
+        /// <summary>
+        /// Gets or shared the Sitefinity domain.
+        /// This is the name of the user Provider on SiteFinity
+        /// <remarks>Teh default domain is 'Default' but it could be 'LdapProvider' is using user from AD.</remarks> 
+        /// </summary>
         public string Domain { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SiteFinityRelyingParty()
         {
             Enabled = true;
