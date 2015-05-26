@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>IdentityServer3.WsFederation</id>
+    <id>IdentityServer3.SiteFinity</id>
     <version>0.0.0</version>
     <title>IdentityServer3 - SiteFinity Plugin</title>
     <authors>Alexandre Roba</authors>
